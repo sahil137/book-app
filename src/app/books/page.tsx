@@ -1,5 +1,7 @@
+"use client";
 import AddBookCard from "@/components/add-book-card";
 import BookCard from "@/components/book-card";
+import { trpc } from "@/trpc/client";
 import React from "react";
 import { BiSolidBookBookmark } from "react-icons/bi";
 
@@ -37,6 +39,10 @@ const books = [
 ];
 
 function Books() {
+  const res = trpc.getData.useQuery({ name: "This is my name" });
+
+  console.log(res);
+
   return (
     <div className="p-5 md:p-14 space-y-10">
       <div className="flex items-center md:justify-center lg:justify-start gap-4">
