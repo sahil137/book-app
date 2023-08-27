@@ -21,7 +21,7 @@ const classes = {
   shadow: "focus:shadow",
 };
 
-export default function TextArea(props: Props) {
+const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
   const {
     className,
     label,
@@ -62,9 +62,12 @@ export default function TextArea(props: Props) {
         autoCapitalize="off"
         spellCheck="false"
         rows={4}
+        ref={ref}
         {...rest}
       />
       {error && <p className="my-2 text-xs text-end text-red-500">{error}</p>}
     </div>
   );
-}
+});
+
+export default TextArea;

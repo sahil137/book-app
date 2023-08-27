@@ -73,6 +73,7 @@ const Input = (
         </label>
       )}
       <input
+        ref={ref}
         id={name}
         name={name}
         type={type}

@@ -39,9 +39,11 @@ const books = [
 ];
 
 function Books() {
-  const res = trpc.getData.useQuery({ name: "This is my name" });
+  const booksData = trpc.getBooks.useQuery();
 
-  console.log(res);
+  console.log(booksData);
+
+  if (!booksData.data) return <>Loading....</>;
 
   return (
     <div className="p-5 md:p-14 space-y-10">

@@ -7,6 +7,8 @@ import TextArea from "@/components/text-area";
 import Button from "@/components/button";
 import UploderComponent from "@/components/uploader-component";
 import Label from "@/components/label";
+import { toast } from "react-toastify";
+import { trpc } from "@/trpc/client";
 
 type FormData = {
   name: string;
@@ -39,7 +41,26 @@ function AddBook() {
     defaultValues,
   });
 
-  async function onSubmit(values: FormData) {}
+  const addBook = trpc.createBook.useMutation();
+
+  const onSubmit = async (values: FormData) => {
+    try {
+      const { pdf, cover } = values;
+      // if (cover === "") {
+      //   toast.info("Please uplaod a cover of the book");
+      //   return;
+      // }
+      // if (pdf === "") {
+      //   toast.info("Please uplaod a PDF of the book");
+      //   return;
+      // }
+      addBook.mutate();
+      console.log("ressdsd", values);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message);
+    }
+  };
 
   return (
     <div className="p-5 md:p-14 space-y-5">
@@ -58,7 +79,7 @@ function AddBook() {
         onSubmit={handleSubmit(onSubmit)}
         className="lg:flex justify-center items-start p-3"
       >
-        <div className="basis-1/4 lg:h-[500px]">
+        <div className="basis-1/4">
           <Label className="text-xl text-center mb-5">Book Cover</Label>
           <Controller
             control={control}
@@ -84,41 +105,46 @@ function AddBook() {
         </div>
         <div className="basis-3/4 h-5/6 p-5 space-y-5">
           <Input
+            {...register("name")}
+            error={errors?.name?.message}
             label="Name of the Book"
             variant="outline"
             placeholder="Enter the published name"
-            {...register("name", { required: true })}
-            error={errors?.name?.message}
+            required
           />
 
           <div className="space-y-5 md:space-y-0 md:flex gap-2">
             <Input
+              {...register("authors")}
+              error={errors?.authors?.message}
               className="basis-1/2"
               label="Author of the Book"
               placeholder="Add all the authors comma separated"
               variant="outline"
-              {...register("authors", { required: true, pattern: regex })}
-              error={errors?.authors?.message}
+              required
             />
             <Input
+              {...register("readTime")}
+              error={errors?.readTime?.message}
               className="basis-1/2"
               label="Book read time"
               placeholder="Add time in mins"
               variant="outline"
               type="number"
               min={0}
-              {...register("readTime", { required: true })}
-              error={errors?.readTime?.message}
+              required
             />
           </div>
 
           <TextArea
+            {...register("description")}
+            error={errors?.description?.message}
             label="Book Details"
             rows={5}
             placeholder="Max characters 300"
             variant="outline"
-            {...register("description", { required: true, maxLength: 300 })}
-            error={errors?.description?.message}
+            required
+            maxLength={300}
           />
 
           <Controller
