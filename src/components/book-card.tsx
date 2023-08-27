@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 function BookCard() {
   return (
-    <Link href="/books/add">
+    <Link href="/books/details/1234">
       <motion.div
         whileHover={{ scale: 1.05 }}
-        className="h-80 w-[190px] dark:bg-gray-800 overflow-hidden"
+        className="h-80 xs:w-44 md:w-[190px] dark:bg-gray-800 overflow-hidden"
       >
         <div className="overflow-hidden rounded-md">
           <Image

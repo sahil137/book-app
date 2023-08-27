@@ -38,12 +38,12 @@ const books = [
 
 function Books() {
   return (
-    <div className="p-5 md:p-14 space-y-5">
-      <div className="flex items-center md:justify-center lg:justify-start gap-4 border border-black">
+    <div className="p-5 md:p-14 space-y-10">
+      <div className="flex items-center md:justify-center lg:justify-start gap-4">
         <BiSolidBookBookmark size={50} color="#27378C" />
-        <h2 className="font-bold text-[#27378C] text-4xl">Books</h2>
+        <h2 className="font-bold text-primaryColor text-4xl">Books</h2>
       </div>
-      <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-5 place-items-center">
+      <div className="grid xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 place-items-center">
         <BookCard />
         <BookCard />
         <BookCard />
