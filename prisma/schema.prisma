@@ -11,7 +11,7 @@ datasource db {
 
 model Book {
   id Int @id @default(autoincrement())
-  name String @unique
+  name String
   description String
   authors String[]
   readTime Int

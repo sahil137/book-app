@@ -9,11 +9,12 @@ import UploderComponent from "@/components/uploader-component";
 import Label from "@/components/label";
 import { toast } from "react-toastify";
 import { trpc } from "@/trpc/client";
+import { useRouter } from "next/navigation";
 
 type FormData = {
   name: string;
   authors: string;
-  readTime: number | null;
+  readTime: string;
   description: string;
   cover: string;
   pdf: string;
@@ -22,13 +23,11 @@ type FormData = {
 const defaultValues = {
   name: "",
   authors: "",
-  readTime: null,
+  readTime: "",
   description: "",
   cover: "",
   pdf: "",
 };
-
-const regex = new RegExp("^[0-9a-zA-Z]+(,[0-9a-zA-Z]+)*$");
 
 function AddBook() {
   const {
@@ -42,20 +41,31 @@ function AddBook() {
   });
 
   const addBook = trpc.createBook.useMutation();
+  const router = useRouter();
 
   const onSubmit = async (values: FormData) => {
     try {
       const { pdf, cover } = values;
-      // if (cover === "") {
-      //   toast.info("Please uplaod a cover of the book");
-      //   return;
-      // }
-      // if (pdf === "") {
-      //   toast.info("Please uplaod a PDF of the book");
-      //   return;
-      // }
-      addBook.mutate();
-      console.log("ressdsd", values);
+      if (cover === "") {
+        toast.info("Please Upload a cover for the book");
+        return;
+      }
+      if (pdf === "") {
+        toast.info("Please upload the book pdf");
+        return;
+      }
+      const authors = values?.authors?.split(",");
+      addBook.mutate({
+        ...values,
+        rating: 0,
+        coverImage: values?.cover,
+        authors,
+        readTime: parseInt(values?.readTime),
+      });
+      if (addBook?.data?.success) {
+        toast.success("Book Created");
+        router.push("/books");
+      }
     } catch (error: any) {
       console.log(error);
       toast.error(error?.message);
@@ -172,6 +182,7 @@ function AddBook() {
           <Button
             className="xs:w-full lg:w-auto bg-primaryColor text-white"
             type="submit"
+            loading={addBook.isLoading}
           >
             Add Book
           </Button>

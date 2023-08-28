@@ -6,25 +6,44 @@ export const appRouter = router({
     const res = await db.book.findMany();
     return res;
   }),
-  createBook: publicProcedure.mutation(async (args) => {
-    const res = await db.book.create({
-      data: {
-        coverImage:
-          "https://utfs.io/f/40a1656e-6163-4c54-b027-fcc2b7efec77_juanjo-jaramillo-mZnx9429i94-unsplash.jpg",
-        description: "Test",
-        name: "Test Book",
-        pdf: "https://utfs.io/f/b3037320-7355-485d-952c-389d14e8c9b6_Addison_Wesley_The_Object_Orient_Thought_Process.pdf",
-        rating: 4,
-        readTime: 120,
-        authors: ["sahil", "saini"],
-        createdAt: new Date(Date.now()),
-      },
-    });
-    if (res)
-      return {
-        success: true,
-      };
-  }),
+  createBook: publicProcedure
+    .input(
+      z.object({
+        coverImage: z.string(),
+        description: z.string(),
+        name: z.string(),
+        pdf: z.string(),
+        rating: z.number(),
+        readTime: z.number(),
+        authors: z.array(z.string()),
+      })
+    )
+    .mutation(async (args) => {
+      const { input } = args;
+      const res = await db.book.create({
+        data: {
+          ...input,
+        },
+      });
+      if (res)
+        return {
+          success: true,
+        };
+    }),
+  getBook: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(async (args) => {
+      const res = await db.book.findUnique({
+        where: {
+          id: args?.input?.id,
+        },
+      });
+      return res;
+    }),
 });
 
 export type AppRouter = typeof appRouter;
