@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import cover from "../../../../assets/book-cover.webp";
 import RatingComponent from "@/components/rating-component";
 import Button from "@/components/button";
 import { trpc } from "@/trpc/client";
@@ -53,7 +52,7 @@ function BookDetails({ params }: { params: { bookId: string } }) {
             <div className="lg:flex justify-center items-start gap-3 p-3">
               <div className="basis-1/4 rounded-lg overflow-hidden flex justify-center items-center h-[400px]">
                 <Image
-                  src={bookData?.data?.coverImage || cover}
+                  src={bookData?.data?.coverImage || ""}
                   alt="Book Cover"
                   height={400}
                   width={250}
