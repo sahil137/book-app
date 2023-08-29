@@ -24,7 +24,7 @@ function Books() {
   return (
     <div className="p-5 md:p-14 space-y-10">
       <div className="flex items-center md:justify-center lg:justify-start gap-4">
-        <BiSolidBookBookmark size={50} color="#27378C" />
+        <BiSolidBookBookmark size={30} color="#27378C" />
         <h2 className="font-bold text-primaryColor text-4xl">Books</h2>
       </div>
       {isFetching ? (

@@ -18,7 +18,7 @@ function getTimeInHours(value: number | undefined) {
 }
 
 function BookDetails({ params }: { params: { bookId: string } }) {
-  const bookData = trpc.getBook.useQuery(
+  const { data, isLoading, error, isError } = trpc.getBook.useQuery(
     { id: parseInt(params.bookId) },
     {
       refetchOnMount: false,
@@ -27,12 +27,25 @@ function BookDetails({ params }: { params: { bookId: string } }) {
     }
   );
 
-  console.log(bookData);
-
-  if (bookData.isError) return <>Error in getting book</>;
+  if (!data)
+    return (
+      <div className="min-h-[80vh] flex flex-col justify-center items-center gap-10">
+        <Link href="/books">
+          <button
+            type="button"
+            className="text-primaryColor hover:text-white border border-primaryColor hover:bg-primaryColor focus:ring-4 focus:outline-none focus:ring-primaryColor font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800 transition-all ease-in-out"
+          >
+            Back to Home
+          </button>
+        </Link>
+        <h3 className="text-3xl text-primaryColor font-semibold">
+          Error in getting book
+        </h3>
+      </div>
+    );
   return (
     <>
-      {bookData.isFetching ? (
+      {isLoading ? (
         <div className="h-screen w-screen flex justify-center items-center">
           <Spinner />
         </div>
@@ -53,7 +66,7 @@ function BookDetails({ params }: { params: { bookId: string } }) {
             <div className="lg:flex justify-center items-start gap-3 p-3">
               <div className="basis-1/4 rounded-lg overflow-hidden flex justify-center items-center h-[400px]">
                 <Image
-                  src={bookData?.data?.coverImage || ""}
+                  src={data?.coverImage || ""}
                   alt="Book Cover"
                   height={400}
                   width={250}
@@ -63,27 +76,25 @@ function BookDetails({ params }: { params: { bookId: string } }) {
               <div className="basis-3/4 h-5/6 p-5 space-y-5">
                 <div className="space-y-2 mb-4">
                   <h2 className="text-primaryColor font-semibold text-3xl">
-                    {bookData?.data?.name}
+                    {data?.name}
                   </h2>
                   <h5 className="font-light text-sm">Author(s) of Book</h5>
-                  {bookData?.data?.authors?.map((author) => (
+                  {data?.authors?.map((author) => (
                     <span className="text-sm font-extralight">
                       {author} &nbsp;
                     </span>
                   ))}
                   <h5 className="font-light text-sm">
-                    Book Read Time: {getTimeInHours(bookData?.data?.readTime)}
+                    Book Read Time: {getTimeInHours(data?.readTime)}
                   </h5>
                 </div>
 
-                <div className="text-sm font-medium">
-                  {bookData?.data?.description}
-                </div>
+                <div className="text-sm font-medium">{data?.description}</div>
 
                 <div className="lg:flex gap-3 basis-1/4">
                   <div className="basis-1/2">
                     <RatingComponent />
-                    <Link href={bookData?.data?.pdf || ""} target="_blank">
+                    <Link href={data?.pdf || ""} target="_blank">
                       <Button className="bg-primaryColor text-xs px-3 text-white mt-5">
                         Read This Book
                       </Button>
