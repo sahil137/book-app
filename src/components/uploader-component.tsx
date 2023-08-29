@@ -14,8 +14,14 @@ function UploderComponent({ type, value, onChange }: Uploader) {
         <>
           {value !== "" ? (
             <>
-              <div className="relative h-56 lg:h-[500px] flex items-center">
-                <Image fill src={value} alt="Book Cover" />
+              <div className="relative lg:h-[500px] flex items-center justify-center">
+                <Image
+                  src={value}
+                  alt="Book Cover"
+                  height={400}
+                  width={250}
+                  objectFit="cover"
+                />
               </div>
             </>
           ) : (

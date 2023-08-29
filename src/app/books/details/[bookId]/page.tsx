@@ -23,6 +23,7 @@ function BookDetails({ params }: { params: { bookId: string } }) {
     {
       refetchOnMount: false,
       refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     }
   );
 

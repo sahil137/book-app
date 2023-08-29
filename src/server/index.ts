@@ -28,6 +28,7 @@ export const appRouter = router({
       if (res)
         return {
           success: true,
+          data: res,
         };
     }),
   getBook: publicProcedure

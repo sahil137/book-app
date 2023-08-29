@@ -7,10 +7,19 @@ import React from "react";
 import { BiSolidBookBookmark } from "react-icons/bi";
 
 function Books() {
-  const booksData = trpc.getBooks.useQuery(undefined, {
-    refetchOnMount: false,
+  const { data, isFetching, error } = trpc.getBooks.useQuery(undefined, {
     refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   });
+
+  if (error)
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <h3 className="text-2xl font-semibold text-primaryColor">
+          Error in getting Data
+        </h3>
+      </div>
+    );
 
   return (
     <div className="p-5 md:p-14 space-y-10">
@@ -18,7 +27,7 @@ function Books() {
         <BiSolidBookBookmark size={50} color="#27378C" />
         <h2 className="font-bold text-primaryColor text-4xl">Books</h2>
       </div>
-      {booksData?.isFetching ? (
+      {isFetching ? (
         <>
           <div className="grid xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 place-items-center">
             <BookSkeleton />
@@ -29,7 +38,7 @@ function Books() {
       ) : (
         <>
           <div className="grid xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 place-items-center">
-            {booksData?.data?.map((book) => (
+            {data?.map((book) => (
               <BookCard data={book} />
             ))}
 

@@ -41,35 +41,35 @@ function AddBook() {
   });
 
   const addBook = trpc.createBook.useMutation();
+  const { isLoading, mutateAsync } = addBook;
   const router = useRouter();
 
   const onSubmit = async (values: FormData) => {
-    try {
-      const { pdf, cover } = values;
-      if (cover === "") {
-        toast.info("Please Upload a cover for the book");
-        return;
-      }
-      if (pdf === "") {
-        toast.info("Please upload the book pdf");
-        return;
-      }
-      const authors = values?.authors?.split(",");
-      addBook.mutate({
-        ...values,
-        rating: 0,
-        coverImage: values?.cover,
-        authors,
-        readTime: parseInt(values?.readTime),
-      });
-      if (addBook?.data?.success) {
-        toast.success("Book Created");
-        router.push("/books");
-      }
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error?.message);
+    const { pdf, cover } = values;
+    if (cover === "") {
+      toast.info("Please Upload a cover for the book");
+      return;
     }
+    if (pdf === "") {
+      toast.info("Please upload the book pdf");
+      return;
+    }
+    const authors = values?.authors?.split(",");
+    mutateAsync({
+      ...values,
+      rating: 0,
+      coverImage: values?.cover,
+      authors,
+      readTime: parseInt(values?.readTime),
+    })
+      .then((res) => {
+        toast.success("Book Created");
+        router.push(`/books/details/${res?.data?.id}`);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err?.message);
+      });
   };
 
   return (
@@ -182,7 +182,7 @@ function AddBook() {
           <Button
             className="xs:w-full lg:w-auto bg-primaryColor text-white"
             type="submit"
-            loading={addBook.isLoading}
+            loading={isLoading}
           >
             Add Book
           </Button>
