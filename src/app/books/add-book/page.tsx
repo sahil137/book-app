@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
 
-import Input from "@/components/input";
+import Input from "@/components/ui/input";
 import { useForm, Controller } from "react-hook-form";
 import TextArea from "@/components/text-area";
-import Button from "@/components/button";
+import Button from "@/components/ui/button";
 import UploderComponent from "@/components/uploader-component";
-import Label from "@/components/label";
+import Label from "@/components/ui/label";
 import { toast } from "react-toastify";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
